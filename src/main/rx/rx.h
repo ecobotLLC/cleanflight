@@ -173,3 +173,6 @@ void suspendRxSignal(void);
 void resumeRxSignal(void);
 
 uint16_t rxGetRefreshRate(void);
+
+//add
+static uint16_t getRxfailValue(uint8_t channel);

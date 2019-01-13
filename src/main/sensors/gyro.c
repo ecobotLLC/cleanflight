@@ -1209,3 +1209,7 @@ uint8_t gyroReadRegister(uint8_t whichSensor, uint8_t reg)
     return mpuGyroReadRegister(gyroSensorBusByDevice(whichSensor), reg);
 }
 #endif // USE_GYRO_REGISTER_DUMP
+float getgyroSum(int axis)
+{
+    return gyro.gyroADCf[axis];
+}

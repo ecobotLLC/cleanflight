@@ -85,6 +85,7 @@ extern uint8_t __config_end;
 #include "drivers/usb_msc.h"
 #include "drivers/vtx_common.h"
 
+
 #include "fc/board_info.h"
 #include "fc/config.h"
 #include "fc/controlrate_profile.h"
@@ -2225,6 +2226,76 @@ static void cliVtx(char *cmdline)
 }
 
 #endif // VTX_CONTROL
+
+#ifdef USE_NAVI
+/**
+ *this is get for frame. 
+ * and set flight prigram
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+**/
+#define FLIGHT_CONTROL_NAVI 1
+#define FLIGHT_STATUS_NAVI 2
+static void cliNavi(char *cmdline)
+{
+    int i, val = 0;
+    const char *ptr;
+
+    if (isEmpty(cmdline)) {
+        cliPrint("Empty command");
+    } else {
+        ptr = cmdline;
+        i = atoi(ptr++);
+        if (i == FLIGHT_CONTROL_NAVI) {
+            // this is send contoll command  
+            ptr = nextArg(ptr);
+            if (ptr) {
+                val = atoi(ptr);
+                //accel
+            }
+            ptr = nextArg(ptr);
+            if (ptr) {
+                val = atoi(ptr);
+                //yaw
+            }
+            ptr = nextArg(ptr);
+            if (ptr) {
+                val = atoi(ptr);
+                //roll
+            }
+            ptr = nextArg(ptr);
+            if (ptr) {
+                val = atoi(ptr);
+                //pitch
+            }
+        }else if(i == FLIGHT_STATUS_NAVI)
+        {
+            for(int i = 0; i< 3; i++)
+            {
+            cliPrintf("\r\n\t attitude.raw[%d] : %d ",i,attitude.raw[i]);
+            cliPrintf("\r\n\t attitude.roll[%d] : %d ",i,attitude.values.roll);
+            cliPrintf("\r\n\t attitude.pitch[%d] : %d ",i,attitude.values.pitch);
+            cliPrintf("\r\n\t attitude.yaw[%d] : %d ",i,attitude.values.yaw);
+            }
+            for(int i = 0; i< 6; i++)
+            {
+            cliPrintf("\r\n\t rcRaw[%d] : %d ",i,getRxValue(i));
+            }
+        }
+    }
+}
+#endif
+
+
+
+
+
+
+
 
 static void printName(uint8_t dumpMask, const pilotConfig_t *pilotConfig)
 {
@@ -4498,6 +4569,19 @@ const clicmd_t cmdTable[] = {
 #ifdef USE_VTX_CONTROL
     CLI_COMMAND_DEF("vtx", "vtx channels on switch", NULL, cliVtx),
 #endif
+//     // add External control
+// #ifdef  USE_EX_CTRL
+//         CLI_COMMAND_DEF("ex_ctrl", NULL, NULL, exCtrl),
+// #endif
+//     // add GET RX VALUE
+// #ifdef  USE_EX_CTRL
+//         CLI_COMMAND_DEF("rx_value", NULL, NULL, rxValue),
+// #endif
+#ifdef USE_NAVI
+    CLI_COMMAND_DEF("navi", "navigation system", NULL, cliNavi),
+#endif
+
+    
 };
 
 static void cliHelp(char *cmdline)

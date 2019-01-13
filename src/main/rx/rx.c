@@ -686,3 +686,7 @@ uint16_t rxGetRefreshRate(void)
 {
     return rxRuntimeConfig.rxRefreshRate;
 }
+uint16_t getRxValue(uint8_t channel)
+{
+    return rcData[channel];
+}
